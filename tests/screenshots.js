@@ -1,0 +1,38 @@
+const { chromium } = require('playwright');
+const path = require('path');
+const fs = require('fs');
+
+(async()=>{
+  const output=path.join(__dirname,'..','evidencias');
+  fs.mkdirSync(output,{recursive:true});
+  const browser=await chromium.launch({headless:true,executablePath:'/home/agent/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome',args:['--no-sandbox']});
+  const context=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true});
+  const page=await context.newPage();
+  await page.goto('http://127.0.0.1:3000',{waitUntil:'networkidle'});
+  await page.screenshot({path:path.join(output,'01-inicio-sesion.png'),fullPage:true});
+  await page.fill('#email','estudiante@universidad.mx');
+  await page.fill('#password',process.env.DEMO_STUDENT_PASSWORD);
+  await page.click('button[type="submit"]');
+  await page.waitForSelector('#homeScreen.active');
+  await page.screenshot({path:path.join(output,'02-panel-principal.png'),fullPage:true});
+  await page.click('#quickNew');
+  await page.selectOption('#category','Iluminación');
+  await page.selectOption('#priority','Urgente');
+  await page.selectOption('#building','Laboratorios');
+  await page.fill('#location','Laboratorio de cómputo 2');
+  await page.fill('#title','Lámpara con cable expuesto');
+  await page.fill('#description','La lámpara del área central presenta un cable expuesto y parpadea constantemente.');
+  await page.setInputFiles('#photo',path.join(__dirname,'evidencia-lampara.svg'));
+  await page.screenshot({path:path.join(output,'03-registro-reporte.png'),fullPage:true});
+  await page.click('#reportForm button[type="submit"]');
+  await page.waitForSelector('#detailScreen.active');
+  await page.screenshot({path:path.join(output,'04-reporte-registrado.png'),fullPage:true});
+  await page.click('[data-go="reports"]');
+  await page.waitForSelector('#reportsScreen.active');
+  await page.screenshot({path:path.join(output,'05-consulta-reportes.png'),fullPage:true});
+  await page.click('[data-go="profile"]');
+  await page.waitForSelector('#profileScreen.active');
+  await page.screenshot({path:path.join(output,'06-perfil-seguro.png'),fullPage:true});
+  await browser.close();
+  console.log(output);
+})();

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#173b67" />
+  <title>Mantenimiento U</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <main id="loginView" class="auth-shell">
+    <section class="auth-hero">
+      <div class="brand-mark">MU</div>
+      <h1>Mantenimiento U</h1>
+      <p>Reporta, consulta y da seguimiento a problemas de infraestructura universitaria.</p>
+      <div class="feature-list">
+        <span>✓ Seguimiento por estados</span><span>✓ Evidencia fotográfica</span><span>✓ Acceso seguro</span>
+      </div>
+    </section>
+    <section class="login-card">
+      <p class="eyebrow">ACCESO INSTITUCIONAL</p>
+      <h2>Iniciar sesión</h2>
+      <p class="muted">Utiliza tus credenciales universitarias.</p>
+      <form id="loginForm">
+        <label>Correo institucional<input id="email" type="email" autocomplete="username" placeholder="correo@universidad.mx" required maxlength="120" /></label>
+        <label>Contraseña
+          <div class="password-wrap"><input id="password" type="password" autocomplete="current-password" placeholder="Contraseña" required maxlength="72"/><button type="button" id="togglePassword" aria-label="Mostrar contraseña">◉</button></div>
+        </label>
+        <button class="primary full" type="submit">Ingresar de forma segura</button>
+      </form>
+      <p class="demo-note">Las credenciales de demostración se entregan por separado y no se publican en el código.</p>
+    </section>
+  </main>
+
+  <div id="appView" class="app hidden">
+    <header class="topbar">
+      <div><strong>Mantenimiento U</strong><small id="connectionState">En línea</small></div>
+      <button id="profileButton" class="avatar" aria-label="Perfil">JL</button>
+    </header>
+
+    <section id="homeScreen" class="screen active">
+      <div class="welcome"><div><p class="eyebrow">GESTIÓN UNIVERSITARIA</p><h1 id="welcomeTitle">Hola</h1><p>Consulta el avance de tus solicitudes.</p></div><div class="shield">✓</div></div>
+      <div class="stats" id="stats"></div>
+      <button id="quickNew" class="new-report"><span>＋</span><div><strong>Crear nuevo reporte</strong><small>Registra un problema de infraestructura</small></div><b>›</b></button>
+      <div class="section-head"><h2>Reportes recientes</h2><button data-go="reports">Ver todos</button></div>
+      <div id="recentReports" class="report-list"></div>
+    </section>
+
+    <section id="newScreen" class="screen">
+      <div class="screen-title"><button class="back" data-go="home">‹</button><div><h1>Nuevo reporte</h1><p>Describe el problema encontrado.</p></div></div>
+      <form id="reportForm" class="form-card">
+        <div class="step-label">1. Clasificación</div>
+        <div class="grid two"><label>Categoría<select id="category" required><option value="">Selecciona</option><option>Equipo de cómputo</option><option>Iluminación</option><option>Mobiliario</option><option>Internet</option><option>Instalación eléctrica</option><option>Agua y sanitarios</option><option>Otro</option></select></label><label>Prioridad<select id="priority" required><option>Media</option><option>Baja</option><option>Alta</option><option>Urgente</option></select></label></div>
+        <div class="step-label">2. Ubicación</div>
+        <div class="grid two"><label>Edificio<select id="building" required><option value="">Selecciona</option><option>Edificio A</option><option>Edificio B</option><option>Biblioteca</option><option>Laboratorios</option><option>Rectoría</option><option>Áreas exteriores</option></select></label><label>Aula o área<input id="location" required maxlength="80" placeholder="Ej. Laboratorio 3" /></label></div>
+        <div class="step-label">3. Detalles</div>
+        <label>Título<input id="title" required minlength="5" maxlength="100" placeholder="Describe brevemente el problema" /></label>
+        <label>Descripción<textarea id="description" required minlength="10" maxlength="600" rows="4" placeholder="Incluye detalles que ayuden al personal de mantenimiento..."></textarea><small><span id="charCount">0</span>/600 caracteres</small></label>
+        <div class="step-label">4. Evidencia fotográfica</div>
+        <label class="photo-picker" for="photo"><input id="photo" type="file" accept="image/*" capture="environment"/><span id="photoIcon">📷</span><strong id="photoLabel">Agregar fotografía</strong><small>JPG o PNG, máximo 2 MB</small><img id="photoPreview" alt="Vista previa de evidencia" /></label>
+        <button class="primary full" type="submit">Enviar reporte</button>
+      </form>
+    </section>
+
+    <section id="reportsScreen" class="screen">
+      <div class="screen-title"><div><p class="eyebrow">HISTORIAL</p><h1>Mis reportes</h1><p id="reportCount">Consulta y filtra tus solicitudes.</p></div></div>
+      <div class="filters"><input id="search" placeholder="Buscar por título o ubicación"/><select id="statusFilter"><option value="">Todos los estados</option><option>Recibido</option><option>En revisión</option><option>En proceso</option><option>Resuelto</option></select><select id="priorityFilter"><option value="">Todas las prioridades</option><option>Urgente</option><option>Alta</option><option>Media</option><option>Baja</option></select></div>
+      <div id="reportsList" class="report-list"></div>
+    </section>
+
+    <section id="detailScreen" class="screen">
+      <div class="screen-title"><button class="back" data-go="reports">‹</button><div><p class="eyebrow">DETALLE DEL REPORTE</p><h1 id="detailId">Reporte</h1></div></div>
+      <div id="detailContent"></div>
+    </section>
+
+    <section id="profileScreen" class="screen">
+      <div class="screen-title"><button class="back" data-go="home">‹</button><div><h1>Mi perfil</h1><p>Información de la sesión actual.</p></div></div>
+      <div class="profile-card"><div class="big-avatar" id="profileInitials">JL</div><h2 id="profileName"></h2><p id="profileEmail"></p><span id="profileRole" class="role-chip"></span></div>
+      <div class="settings-list"><div><span>🔐</span><div><strong>Sesión protegida</strong><small>Token de acceso con expiración</small></div></div><div><span>☁️</span><div><strong>Sincronización</strong><small id="queueInfo">Sin reportes pendientes</small></div></div><button id="logoutButton"><span>↪</span><div><strong>Cerrar sesión</strong><small>Eliminar token del dispositivo</small></div></button></div>
+    </section>
+
+    <nav class="bottom-nav"><button data-go="home" class="active"><span>⌂</span>Inicio</button><button data-go="reports"><span>▤</span>Reportes</button><button data-go="new" class="fab"><span>＋</span>Reportar</button><button data-go="profile"><span>●</span>Perfil</button></nav>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>

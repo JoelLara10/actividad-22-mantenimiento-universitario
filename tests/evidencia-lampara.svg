@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <rect width="640" height="480" fill="#dfe6ed"/>
+  <rect x="80" y="55" width="480" height="330" rx="12" fill="#f8fafc" stroke="#9daaba" stroke-width="8"/>
+  <path d="M320 88v90" stroke="#333" stroke-width="12"/>
+  <path d="M320 178c-55 0-95 42-95 95h190c0-53-40-95-95-95z" fill="#f4b942" stroke="#4b5563" stroke-width="8"/>
+  <path d="m315 92 32 26-40 24 35 30" fill="none" stroke="#d9485f" stroke-width="12"/>
+  <path d="M120 420h400" stroke="#173b67" stroke-width="6"/>
+  <text x="320" y="452" text-anchor="middle" font-family="Arial" font-size="24" fill="#173b67">Evidencia: lámpara con cable expuesto</text>
+</svg>

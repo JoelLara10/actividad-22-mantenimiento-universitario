@@ -1,0 +1,14 @@
+{
+  "name": "actividad22-mantenimiento-universitario",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Aplicación móvil PWA y API para reportes de mantenimiento universitario",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node tests/api.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
