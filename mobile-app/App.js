@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  ActivityIndicator, Alert, Image, Pressable, SafeAreaView, ScrollView, StatusBar,
+  ActivityIndicator, Alert, Image, Pressable, ScrollView, StatusBar,
   Platform, StyleSheet, Text, TextInput, View
 } from 'react-native';
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
@@ -93,7 +94,7 @@ export default function App() {
   const save=async(form,isOnline)=>{if(!isOnline){const q=JSON.parse(await AsyncStorage.getItem(QUEUE_KEY)||'[]');q.push(form);await AsyncStorage.setItem(QUEUE_KEY,JSON.stringify(q));setPending(q.length);Alert.alert('Reporte guardado','Se enviará cuando vuelva la conexión.');setScreen('home');return}try{const r=await request('/reports',{method:'POST',body:JSON.stringify(form)},token);Alert.alert('Reporte enviado',`Folio: ${r.folio}`);await refresh();await open(r.id)}catch(e){Alert.alert('No fue posible enviar',e.message)}};
   if(loading)return <View style={styles.loading}><ActivityIndicator size="large" color={COLORS.blue}/></View>;
   if(!token||!user)return <Login onLogin={login}/>;
-  return <SafeAreaView style={styles.safe}><StatusBar barStyle="dark-content"/><View style={styles.topbar}><View><Text style={styles.topbarTitle}>Mantenimiento U</Text><Text style={[styles.connection,{color:online?COLORS.green:COLORS.red}]}>{online?'En línea':'Sin conexión'}</Text></View><Pressable onPress={()=>setScreen('profile')} style={styles.avatar}><Text style={styles.avatarText}>{user.name.split(' ').slice(0,2).map(x=>x[0]).join('')}</Text></Pressable></View><View style={{flex:1}}>{screen==='home'&&<Home user={user} dashboard={dashboard} reports={reports} onNew={()=>setScreen('new')} onOpen={open}/>} {screen==='reports'&&<Reports reports={reports} onOpen={open}/>} {screen==='new'&&<NewReport online={online} onSaved={save}/>} {screen==='detail'&&<Detail report={detail}/>} {screen==='profile'&&<Profile user={user} pending={pending} onLogout={logout}/>}</View>{screen!=='detail'&&<Nav screen={screen} setScreen={setScreen}/>}</SafeAreaView>;
+  return <SafeAreaProvider><SafeAreaView style={styles.safe}><StatusBar barStyle="dark-content"/><View style={styles.topbar}><View><Text style={styles.topbarTitle}>Mantenimiento U</Text><Text style={[styles.connection,{color:online?COLORS.green:COLORS.red}]}>{online?'En línea':'Sin conexión'}</Text></View><Pressable onPress={()=>setScreen('profile')} style={styles.avatar}><Text style={styles.avatarText}>{user.name.split(' ').slice(0,2).map(x=>x[0]).join('')}</Text></Pressable></View><View style={{flex:1}}>{screen==='home'&&<Home user={user} dashboard={dashboard} reports={reports} onNew={()=>setScreen('new')} onOpen={open}/>}{screen==='reports'&&<Reports reports={reports} onOpen={open}/>}{screen==='new'&&<NewReport online={online} onSaved={save}/>}{screen==='detail'&&<Detail report={detail}/>}{screen==='profile'&&<Profile user={user} pending={pending} onLogout={logout}/>}</View><Nav screen={screen} setScreen={setScreen}/></SafeAreaView></SafeAreaProvider>;
 }
 
 const styles=StyleSheet.create({
